@@ -1,4 +1,3 @@
-spring.application.name=MiniCasino
 spring.datasource.url=jdbc:postgresql://localhost:5432/minicasino
 spring.datasource.username=postgres
 spring.datasource.password=Bdr5923!
