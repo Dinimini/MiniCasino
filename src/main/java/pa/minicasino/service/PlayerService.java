@@ -18,12 +18,14 @@ public class PlayerService {
         this.playerRepository = playerRepository;
     }
 
-    /**
-     * Fetch a PlayerModel by username.
-     *
-     * @param username The player's username.
-     * @return PlayerModel containing the player's username and balance.
-     */
+    public PlayerModel createPlayer(String username) {
+        PlayerEntity newPlayer = new PlayerEntity();
+        newPlayer.setUsername(username);
+        newPlayer.setBalance(1000);
+        playerRepository.save(newPlayer);
+        return new PlayerModel(username, 1000);
+    }
+
     public PlayerModel getPlayerByUsername(String username) {
         PlayerEntity player = playerRepository.findByUsername(username);
         if (player == null) {
@@ -32,22 +34,24 @@ public class PlayerService {
         return new PlayerModel(player.getUsername(), player.getBalance());
     }
 
-    /**
-     * Update the balance for a player.
-     *
-     * @param username The player's username.
-     * @param balanceChange The amount to change the balance (e.g., positive for credit, negative for debit).
-     */
     public void updatePlayerBalance(String username, int balanceChange) {
         PlayerEntity player = playerRepository.findByUsername(username);
         if (player == null) {
             throw new IllegalArgumentException("Player not found with username: " + username);
         }
 
-        // Update the player's balance
         player.changeBalance(balanceChange);
 
-        // Save the updated entity
         playerRepository.save(player);
     }
+
+    public int getPlayerBalance(String username){
+        PlayerEntity player = playerRepository.findByUsername(username);
+        if (player == null) {
+            throw new IllegalArgumentException("Player not found with username: " + username);
+        }
+        return player.getBalance();
+    }
+
+
 }

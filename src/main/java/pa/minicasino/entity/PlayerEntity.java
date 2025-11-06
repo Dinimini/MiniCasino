@@ -19,13 +19,23 @@ public class PlayerEntity {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public int getBalance() {
         return balance;
+    }
+
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 
     public void changeBalance(int balanceChange) {
         this.balance += balanceChange;
     }
+
+
 
     // Getterek, setterek, konstruktorok szükség szerint
 }

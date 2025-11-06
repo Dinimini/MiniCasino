@@ -2,6 +2,7 @@ package pa.minicasino.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pa.minicasino.controller.PlayerController;
 import pa.minicasino.gameLogic.DiceRoller;
 import pa.minicasino.repository.PlayerRepository;
 import pa.minicasino.service.BetService;
@@ -24,7 +25,9 @@ public class Config {
         return new SecurityConfig();
     }
 
-
-
+    @Bean
+    public PlayerController playerController() {
+        return new PlayerController();
+    }
 
 }

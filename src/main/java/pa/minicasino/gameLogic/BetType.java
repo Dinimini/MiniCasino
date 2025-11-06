@@ -1,9 +1,12 @@
 package pa.minicasino.gameLogic;
 
+import pa.minicasino.model.BetModel;
+import pa.minicasino.model.BetTypeData;
+
 public enum BetType {
 
 
-    GREATER_THAN(new int[]{1, 2, 3, 4, 5}) {
+    GREATER_THAN("greater than:", new int[]{1, 2, 3, 4, 5}) {
         @Override
         public double expectedValue(int n) {
             return (double) n/6;
@@ -13,7 +16,7 @@ public enum BetType {
             return guess > roll;
         }
     },
-    LESSER_THAN(new int[]{2, 3, 4, 5, 6}) {
+    LESSER_THAN("less than:", new int[]{2, 3, 4, 5, 6}) {
         @Override
         public double expectedValue(int n) {
             return (double) n/6;
@@ -23,7 +26,7 @@ public enum BetType {
             return guess < roll;
         }
     },   // Példa logika a LESSER esetén
-    ISODD(null) {
+    ISODD("odd", null) {
         @Override
         public double expectedValue(int n) {
             return 2;
@@ -33,7 +36,7 @@ public enum BetType {
             return guess % 2 != 0;
         }
     },
-    ISEVEN(null) {
+    ISEVEN("even", null) {
         @Override
         public double expectedValue(int n) {
             return 2;
@@ -46,8 +49,9 @@ public enum BetType {
 
     private String name;
     private int[] acceptedValues;
+    private String description;
 
-    BetType(int[] acceptedValues) {
+    BetType(String description, int[] acceptedValues) {
         this.name = this.name().toLowerCase();
         this.acceptedValues = acceptedValues;
     }
@@ -68,14 +72,10 @@ public enum BetType {
         return name;
     }
 
-    public BetType getBetType(String name) {
-        for (BetType betType : BetType.values()) {
-            if (betType.getName().equals(name)) {
-                return betType;
-            }
-        }
-        return null;
+    public BetTypeData getBetType(){
+        return new BetTypeData(description, acceptedValues);
     }
+
 
     public abstract double expectedValue(int n);
 

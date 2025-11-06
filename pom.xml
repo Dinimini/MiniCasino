@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>PA</groupId>
-    <artifactId>MiniCasino</artifactId>
+    <artifactId>MiniCasinoBackend</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>MiniCasino</name>
     <description>MiniCasino</description>
