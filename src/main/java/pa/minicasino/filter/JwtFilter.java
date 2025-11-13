@@ -10,39 +10,43 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pa.minicasino.util.JwtUtil;
-import pa.minicasino.service.PlayerService;
+import pa.minicasino.auth.JwtAuthenticationProvider;
 
 import java.io.IOException;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
-    private final PlayerService playerService;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
-    public JwtFilter(JwtUtil jwtUtil, PlayerService playerService) {
-        this.jwtUtil = jwtUtil;
-        this.playerService = playerService;
+    public JwtFilter(JwtAuthenticationProvider jwtAuthenticationProvider) {
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
-            throws ServletException, IOException {
+            throws ServletException, IOException, IOException {
         final String authorizationHeader = request.getHeader("Authorization");
 
-        String username = null;
-        String jwt = null;
+        String path = request.getRequestURI();
+          if (path.equals("/createPlayer") || path.equals("/login")) {
+              if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+                  logger.info("Skipping JWT filtering, as no Authorization header found or it does not start with 'Bearer '");
+              }
 
+              chain.doFilter(request, response);
+              return;
+          }
+
+        String token = null;
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            jwt = authorizationHeader.substring(7);
-            username = jwtUtil.extractUsername(jwt);
+            token = authorizationHeader.substring(7);
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = playerService.loadUserByUsername(username);
+        if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = jwtAuthenticationProvider.getUserDetailsFromToken(token);
 
-            if (jwtUtil.validateToken(jwt, userDetails.getUsername())) {
+            if (userDetails != null && jwtAuthenticationProvider.validateToken(token, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

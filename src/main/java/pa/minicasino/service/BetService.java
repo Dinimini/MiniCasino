@@ -9,7 +9,7 @@ import pa.minicasino.model.ResultModel;
 @Service
 public class BetService {
 
-    private DiceRoller diceRoller;
+    private final DiceRoller diceRoller;
 
     @Autowired
     public BetService(DiceRoller diceRoller) {
@@ -17,8 +17,9 @@ public class BetService {
     }
 
     public ResultModel placeBet(BetModel betModel) {
-        boolean isWin = BetType.valueOf(betModel.betType()).isWin( diceRoller.roll(), betModel.betParams()[0]);
-        int change = isWin ? (int) (betModel.betAmount() * BetType.valueOf(betModel.betType()).expectedValue(betModel.betParams()[0])) : -betModel.betAmount();
+        BetType bet = BetType.valueOf(betModel.betType());
+        boolean isWin = bet.isWin( diceRoller.roll(), betModel.betParams()[0]);
+        int change = isWin ? (int) (betModel.betAmount() * bet.expectedValue(betModel.betParams()[0])) : -betModel.betAmount();
         return new ResultModel(diceRoller.roll(), change, isWin);
     }
 

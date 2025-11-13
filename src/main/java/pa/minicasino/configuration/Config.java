@@ -20,10 +20,7 @@ public class Config {
         return new BetService(diceRoller());
     }
 
-    @Bean
-    public SecurityConfig securityConfig() {
-        return new SecurityConfig();
-    }
+
 
     @Bean
     public PlayerController playerController() {

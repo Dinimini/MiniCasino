@@ -1,13 +1,17 @@
 package pa.minicasino.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import pa.minicasino.exception.InvalidBetException;
 import pa.minicasino.gameLogic.BetType;
 import pa.minicasino.model.BetModel;
 import pa.minicasino.model.BetTypeData;
+import pa.minicasino.model.PlayerModel;
 import pa.minicasino.model.ResultModel;
 import pa.minicasino.service.BetService;
 import pa.minicasino.service.PlayerService;
+import pa.minicasino.util.Util;
 
 @RestController
 public class BetController {
@@ -32,16 +36,21 @@ public class BetController {
         return betTypes;
     }
 
-    @GetMapping("/Bet")
-    public ResultModel startBet( @RequestParam int betAmount, @RequestParam String betType, @RequestParam int[] betParams) {
-        if(!BetType.valueOf(betType).isAcceptedValue(betParams[0])){
-            throw new IllegalArgumentException("Invalid bet.");
-        }
-        if(betAmount <= 0||playerService.getPlayerBalance("user") < betAmount){
-            throw new IllegalArgumentException("Invalid bet amount.");
-        }
-        ResultModel result = betService.placeBet(new BetModel(betType, betAmount, betParams));
-        playerService.updatePlayerBalance("user", result.change());
-        return result;
+    @PostMapping("/Bet")
+    public ResultModel startBet(@RequestParam int betAmount,
+                                @RequestParam String betType,
+                                @RequestParam int[] betParams,
+                                HttpServletRequest request) {
+    if (!BetType.valueOf(betType).isAcceptedValue(betParams[0])) {
+        throw new InvalidBetException("Invalid bet.");
     }
+    String token = Util.extractTokenFromHeader(request);
+    int userbalance = playerService.getPlayerBalance(token);
+    if (betAmount <= 0 || userbalance < betAmount) {
+        throw new IllegalArgumentException("Invalid bet amount.");
+    }
+    ResultModel result = betService.placeBet(new BetModel(betType, betAmount, betParams));
+    playerService.updatePlayerBalance(token, result.change());
+    return result;
+}
 }

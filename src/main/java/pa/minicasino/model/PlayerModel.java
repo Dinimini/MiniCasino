@@ -1,4 +1,4 @@
 package pa.minicasino.model;
 
-public record PlayerModel(String username, int balance) {
+public record PlayerModel(String username, int balance, String password) {
 }

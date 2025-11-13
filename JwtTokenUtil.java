@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    private String secretKey = "FUBa6eMB4wTBQonZMrfJV9V1ZmTcsBL1u0WXc+AeASA="; // Használj titkos kulcsot, ezt biztonságos helyen tartsd!
+    private String secretKey = "your-secret-key"; // Használj titkos kulcsot, ezt biztonságos helyen tartsd!
 
     public String generateToken(String username) {
         return Jwts.builder()

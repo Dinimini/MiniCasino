@@ -1,9 +1,6 @@
 package pa.minicasino.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
 public class PlayerEntity {
@@ -12,7 +9,12 @@ public class PlayerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String password;
+
     private int balance;
 
     public String getUsername() {
@@ -21,6 +23,14 @@ public class PlayerEntity {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public int getBalance() {
@@ -34,8 +44,4 @@ public class PlayerEntity {
     public void changeBalance(int balanceChange) {
         this.balance += balanceChange;
     }
-
-
-
-    // Getterek, setterek, konstruktorok szükség szerint
 }

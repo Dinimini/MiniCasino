@@ -25,7 +25,7 @@ public enum BetType {
         public boolean isWin(int guess, int roll) {
             return guess < roll;
         }
-    },   // Példa logika a LESSER esetén
+    },
     ISODD("odd", null) {
         @Override
         public double expectedValue(int n) {
@@ -33,7 +33,7 @@ public enum BetType {
         }
         @Override
         public boolean isWin(int guess, int roll) {
-            return guess % 2 != 0;
+            return roll % 2 != 0;
         }
     },
     ISEVEN("even", null) {
@@ -43,7 +43,7 @@ public enum BetType {
         }
         @Override
         public boolean isWin(int guess, int roll) {
-            return guess % 2 == 0;
+            return roll % 2 == 0;
         }
     };
 
@@ -52,6 +52,7 @@ public enum BetType {
     private String description;
 
     BetType(String description, int[] acceptedValues) {
+        this.description = description;
         this.name = this.name().toLowerCase();
         this.acceptedValues = acceptedValues;
     }
@@ -68,14 +69,9 @@ public enum BetType {
         return false;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public BetTypeData getBetType(){
-        return new BetTypeData(description, acceptedValues);
+        return new BetTypeData(name, description, acceptedValues);
     }
-
 
     public abstract double expectedValue(int n);
 

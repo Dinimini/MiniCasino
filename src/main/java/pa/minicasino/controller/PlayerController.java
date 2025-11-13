@@ -2,26 +2,35 @@ package pa.minicasino.controller;
 
 
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pa.minicasino.gameLogic.BetType;
-import pa.minicasino.model.BetModel;
-import pa.minicasino.model.BetTypeData;
 import pa.minicasino.model.PlayerModel;
-import pa.minicasino.model.ResultModel;
-import pa.minicasino.service.BetService;
 import pa.minicasino.service.PlayerService;
+import pa.minicasino.util.Util;
 
 @RestController
 public class PlayerController {
+
     @Autowired
     private PlayerService playerService;
+
     @PostMapping("/createPlayer")
-    public PlayerModel createPlayer(@RequestBody String username) {
-        return playerService.createPlayer(username);
+    public PlayerModel createPlayer(@RequestBody PlayerModel playerModel) {
+        return playerService.createPlayer(playerModel.username(), playerModel.password());
     }
+
     @GetMapping("/playerBalance")
-    public int getPlayerBalance(@RequestParam String username) {
-        return playerService.getPlayerBalance(username);
+    public int getPlayerBalance(HttpServletRequest request) {
+        String token = Util.extractTokenFromHeader(request);
+        return playerService.getPlayerBalance(token);
     }
+
+    @PostMapping("/api/login")
+    public PlayerModel login(@RequestBody PlayerModel playerModel) {
+        return playerService.authenticatePlayer(playerModel.username(), playerModel.password());
+    }
+
+
+
 }
