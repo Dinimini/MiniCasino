@@ -47,7 +47,7 @@ public class BetController {
     String token = Util.extractTokenFromHeader(request);
     int userbalance = playerService.getPlayerBalance(token);
     if (betAmount <= 0 || userbalance < betAmount) {
-        throw new IllegalArgumentException("Invalid bet amount.");
+        throw new IllegalArgumentException("Invalid bet amount: " + betAmount);
     }
     ResultModel result = betService.placeBet(new BetModel(betType, betAmount, betParams));
     playerService.updatePlayerBalance(token, result.change());

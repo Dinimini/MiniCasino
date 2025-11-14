@@ -33,7 +33,7 @@ public class PlayerService {
 
         PlayerEntity newPlayer = new PlayerEntity();
         newPlayer.setUsername(username);
-        newPlayer.setPassword(passwordEncoder.encode(rawPassword)); // Jelszó titkosítása
+        newPlayer.setPassword(passwordEncoder.encode(rawPassword));
         newPlayer.setBalance(1000);
         playerRepository.save(newPlayer);
         playerRepository.flush();
@@ -54,13 +54,7 @@ public class PlayerService {
 
     public int getPlayerBalance(String token) {
         String username = extractUsernameFromToken(token);
-        PlayerEntity player = findPlayerAndThrowException(username);
-        return player.getBalance();
-    }
-
-    public PlayerModel getPlayerByUsername(String username) {
-        PlayerEntity player = findPlayerAndThrowException(username);
-        return new PlayerModel(username, player.getBalance(), null);
+        return findPlayerAndThrowException(username).getBalance();
     }
 
     public void updatePlayerBalance(String token, int change) {

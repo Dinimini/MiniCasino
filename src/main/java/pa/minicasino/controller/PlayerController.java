@@ -26,6 +26,12 @@ public class PlayerController {
         return playerService.getPlayerBalance(token);
     }
 
+    @GetMapping("/playerData")
+    public PlayerModel getPlayerData(HttpServletRequest request) {
+        String token = Util.extractTokenFromHeader(request);
+        return new PlayerModel(playerService.extractUsernameFromToken(token), playerService.getPlayerBalance(token), null);
+    }
+
     @PostMapping("/api/login")
     public PlayerModel login(@RequestBody PlayerModel playerModel) {
         return playerService.authenticatePlayer(playerModel.username(), playerModel.password());

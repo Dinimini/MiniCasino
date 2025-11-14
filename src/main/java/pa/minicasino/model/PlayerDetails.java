@@ -17,8 +17,7 @@ public class PlayerDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Egyszerű példa, ahol minden felhasználó "USER" szerepkört kap
-        return Collections.emptyList(); // Vagy használhatsz szerepköröket is, pl. "ROLE_USER"
+        return Collections.emptyList();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class PlayerDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // További logika implementálható, ha szükséges
+        return true;
     }
 
     @Override
@@ -52,6 +51,6 @@ public class PlayerDetails implements UserDetails {
     }
 
     public int getBalance() {
-        return player.getBalance(); // Ha például a balance mezőt is elérhetővé akarod tenni
+        return player.getBalance();
     }
 }

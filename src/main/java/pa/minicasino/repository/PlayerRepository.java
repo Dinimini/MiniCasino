@@ -7,5 +7,4 @@ import pa.minicasino.entity.PlayerEntity;
 @Repository
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
     PlayerEntity findByUsername(String username);
-    PlayerEntity findById(long id);
 }
