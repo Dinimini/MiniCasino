@@ -15,16 +15,5 @@ public class Config {
         return new DiceRoller();
     }
 
-    @Bean
-    public BetService betService() {
-        return new BetService(diceRoller());
-    }
-
-
-
-    @Bean
-    public PlayerController playerController() {
-        return new PlayerController();
-    }
 
 }
